@@ -87,10 +87,13 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}
           {isVideoMuted || isVideoDegraded || isAudioOnly ? (
-            <Avatar
-              name={peerName || ""}
-              data-testid="participant_avatar_icon"
-            />
+            <>
+              <Avatar
+                name={peerName || ""}
+                data-testid="participant_avatar_icon"
+              />
+              <img src="/logo.svg" />
+            </>
           ) : null}
           {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (

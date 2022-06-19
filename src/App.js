@@ -89,7 +89,7 @@ export function EdtechComponent({
     setThemeType(theme);
   }, [theme]);
 
-  const getUserTokenCallback = useCallback(getUserToken, []);
+  const getUserTokenCallback = useCallback(getUserToken, [getUserToken]);
 
   return (
     <ErrorBoundary>
