@@ -28,12 +28,32 @@ import { UI_SETTINGS } from "../common/constants";
 import { useIsHeadless, useUISettings } from "./AppData/useUISettings";
 import { useAppConfig } from "./AppData/useAppConfig";
 
+const profileImageStyles = {
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  transform: 'translateX(-50%) translateY(-50%)',
+  color: 'var(--hms-ui-colors-white)',
+  fontFamily: 'var(--hms-ui-fonts-sans)',
+  width: '72px',
+  height: '72px',
+  borderRadius: '50%',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+};
+const BakstageAvatar = ({ imageUrl }) => {
+  return (
+    <div style={Object.assign({}, profileImageStyles, { backgroundImage: `url(${imageUrl})` })}></div>
+  );
+}
+
 const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
   const trackSelector = trackId
     ? selectTrackByID(trackId)
     : selectVideoTrackByPeerID(peerId);
   const track = useHMSStore(trackSelector);
   const peerName = useHMSStore(selectPeerNameByID(peerId));
+  const peerMetadata = useHMSStore(selectPeerMetadata(peerId));
   const audioTrack = useHMSStore(selectAudioTrackByPeerID(peerId));
   const localPeerID = useHMSStore(selectLocalPeerID);
   const isAudioOnly = useUISettings(UI_SETTINGS.isAudioOnly);
@@ -53,6 +73,8 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     setIsMouseHovered(event.type === "mouseenter");
   }, []);
   const appConfig = useAppConfig();
+  console.log('peerMetadata: ', peerMetadata);
+
   return (
     <StyledVideoTile.Root
       css={{ width, height, padding: getPadding({ isHeadless, appConfig }) }}
@@ -88,10 +110,10 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
           ) : null}
           {isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
-              <Avatar
+              {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
                 name={peerName || ""}
                 data-testid="participant_avatar_icon"
-              />
+              />}
               <img src="/logo.svg" />
             </>
           ) : null}
