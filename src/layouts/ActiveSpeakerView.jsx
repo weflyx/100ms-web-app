@@ -19,7 +19,7 @@ const ActiveSpeakerView = ({showStats}) => {
   }
   // show local peer if there hasn't been any dominant speaker
   const activeSpeaker = latestDominantSpeakerRef.current || localPeer;
-  const showSidePane = activeSpeaker && peers.length > 1;
+  const showSidePane = false; // activeSpeaker && peers.length > 1;
 
   return (
     <Flex css={{ size: "100%", "@lg": { flexDirection: "column" } }}>
