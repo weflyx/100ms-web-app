@@ -68,6 +68,7 @@ Create room from [100ms Dashboard](https://dashboard.100ms.live/create-room) & g
 *Before running the app locally make sure you update the environment file (.env) with the respective REACT_APP_TOKEN_GENERATION_ENDPOINT and REACT_APP_POLICY_CONFIG to avoid parsing error*
 
 Visit the URL : https://localhost:3000/meeting/<room_id>/< role > to join the room
+https://streaming.bakstage.me/meeting/62af5a78b873787aa271261b/speaker
 
 ![image](https://user-images.githubusercontent.com/5078656/119534649-c60da000-bda4-11eb-9847-f283e2daa06f.png)
 

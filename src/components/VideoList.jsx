@@ -37,6 +37,7 @@ const List = ({
     }
   }, [pagesWithTiles.length, page]);
   const useFreeze = FeatureFlags.freezeVideoList();
+
   return (
     <StyledVideoList.Root ref={ref}>
       <StyledVideoList.Container>
@@ -62,8 +63,8 @@ const List = ({
                       <VideoTile
                         showStatsOnTiles={showStatsOnTiles}
                         key={tile.track?.id || tile.peer.id}
-                        width={tile.width}
-                        height={tile.height}
+                        width={maxTileCount === 1 ? '375px' : tile.width}
+                        height={maxTileCount === 1 ? '667px' : tile.height}
                         peerId={tile.peer?.id}
                         trackId={tile.track?.id}
                       />

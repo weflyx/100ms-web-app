@@ -41,6 +41,7 @@ const profileImageStyles = {
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
 };
+// TODO: Handle image URL not reachable scenario
 const BakstageAvatar = ({ imageUrl }) => {
   return (
     <div style={Object.assign({}, profileImageStyles, { backgroundImage: `url(${imageUrl})` })}></div>
@@ -73,7 +74,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     setIsMouseHovered(event.type === "mouseenter");
   }, []);
   const appConfig = useAppConfig();
-  console.log('peerMetadata: ', peerMetadata);
+  // console.log('peerMetadata: ', peerMetadata);
 
   return (
     <StyledVideoTile.Root
