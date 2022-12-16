@@ -128,3 +128,8 @@ is only for file formats which are supported by the native audio and video eleme
 
 `REACT_APP_AUDIO_PLAYLIST` - a list of audio tracks which can be played by a person in the room for everyone
 `REACT_APP_VIDEO_PLAYLIST` - a list of video tracks which can be played by a person in the room for everyone
+
+# Bakstage Customization
+
+The following URL is what gets recorded by BEAM BOT.
+http://localhost:7001/preview/639cce5264fe39d89ed8e307/video-listener?token=beam_recording&ui_mode=activespeaker

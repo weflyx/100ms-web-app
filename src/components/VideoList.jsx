@@ -38,6 +38,8 @@ const List = ({
   }, [pagesWithTiles.length, page]);
   const useFreeze = FeatureFlags.freezeVideoList();
 
+  // console.log('maxTileCount: ', maxTileCount);
+
   return (
     <StyledVideoList.Root ref={ref}>
       <StyledVideoList.Container>
@@ -63,8 +65,10 @@ const List = ({
                       <VideoTile
                         showStatsOnTiles={showStatsOnTiles}
                         key={tile.track?.id || tile.peer.id}
-                        width={maxTileCount === 1 ? '375px' : tile.width}
-                        height={maxTileCount === 1 ? '667px' : tile.height}
+                        width="100vw"
+                        height="100vh"
+                        // width={maxTileCount === 1 ? '100vw' : tile.width}
+                        // height={maxTileCount === 1 ? '100vh' : tile.height}
                         peerId={tile.peer?.id}
                         trackId={tile.track?.id}
                       />

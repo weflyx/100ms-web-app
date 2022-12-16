@@ -78,7 +78,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
 
   return (
     <StyledVideoTile.Root
-      css={{ width, height, padding: getPadding({ isHeadless, appConfig }) }}
+      css={{ width, height, padding: 0 }}
       data-testid={`participant_tile_${peerName}`}
     >
       {peerName !== undefined ? (
@@ -102,6 +102,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
 
           {track ? (
             <Video
+              css={{ borderRadius: 0 }}
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
               mirror={peerId === localPeerID && track?.source === "regular"}
@@ -118,17 +119,17 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               <img src="/logo.svg" />
             </>
           ) : null}
-          {(!isHeadless ||
+          {/* {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (
             <StyledVideoTile.Info data-testid="participant_name_onTile">
               {label}
             </StyledVideoTile.Info>
-          )}
-          {showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
+          )} */}
+          {/* {showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
             <StyledVideoTile.AudioIndicator data-testid="participant_audio_mute_icon">
               <MicOffIcon />
             </StyledVideoTile.AudioIndicator>
-          ) : null}
+          ) : null} */}
           {isMouseHovered && !isHeadless && !isLocal ? (
             <TileMenu
               peerID={peerId}
