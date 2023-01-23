@@ -113,7 +113,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             </>
           ) : track ? (
             <Video
-              css={{ borderRadius: 0 }}
+              style={{ background: '#000', objectFit: 'contain' }}
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
               mirror={peerId === localPeerID && track?.source === "regular"}
