@@ -132,4 +132,4 @@ is only for file formats which are supported by the native audio and video eleme
 # Bakstage Customization
 
 The following URL is what gets recorded by BEAM BOT.
-http://localhost:7001/preview/63cdce9664fe39d89edc8b3e/video-listener?token=beam_recording&ui_mode=activespeaker
+http://localhost:7001/preview/63cde08264fe39d89edc8bb8/video-listener?token=beam_recording&ui_mode=activespeaker

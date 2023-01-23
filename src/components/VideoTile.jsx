@@ -35,16 +35,18 @@ const profileImageStyles = {
   transform: 'translateX(-50%) translateY(-50%)',
   color: 'var(--hms-ui-colors-white)',
   fontFamily: 'var(--hms-ui-fonts-sans)',
-  width: '72px',
-  height: '72px',
-  borderRadius: '50%',
+  width: '100%',
+  height: '100%',
+  maxWidth: '300px',
+  maxHeight: '300px',
+  borderRadius: '10px',
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
 };
 // TODO: Handle image URL not reachable scenario
 const BakstageAvatar = ({ imageUrl }) => {
   return (
-    <div style={Object.assign({}, profileImageStyles, { backgroundImage: `url(${imageUrl})` })}></div>
+    imageUrl ? <div style={Object.assign({}, profileImageStyles, { backgroundImage: `url(${imageUrl})` })}></div> : <img src="/logo.svg" />
   );
 }
 
@@ -100,7 +102,15 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}
 
-          {track ? (
+          {isVideoMuted || isVideoDegraded || isAudioOnly ? (
+            <>
+              {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
+                name={peerName || ""}
+                data-testid="participant_avatar_icon"
+              />}
+              {/* <img src="/logo.svg" /> */}
+            </>
+          ) : track ? (
             <Video
               css={{ borderRadius: 0 }}
               trackId={track?.id}
@@ -110,15 +120,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               data-testid="participant_video_tile"
             />
           ) : null}
-          {isVideoMuted || isVideoDegraded || isAudioOnly ? (
-            <>
-              {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
-                name={peerName || ""}
-                data-testid="participant_avatar_icon"
-              />}
-              <img src="/logo.svg" />
-            </>
-          ) : null}
+
           {/* {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (
             <StyledVideoTile.Info data-testid="participant_name_onTile">
