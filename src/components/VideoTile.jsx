@@ -105,10 +105,11 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
           {isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
               {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
+                shape="square"
+                style={{ height: '100%', width: '100%', maxWidth: '300px', maxHeight: '300px' }}
                 name={peerName || ""}
                 data-testid="participant_avatar_icon"
               />}
-              {/* <img src="/logo.svg" /> */}
             </>
           ) : track ? (
             <Video
