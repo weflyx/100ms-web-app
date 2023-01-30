@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from "react";
+import React, { Fragment, useCallback, useState, useEffect } from "react";
 import {
   Avatar,
   StyledVideoTile,
@@ -7,6 +7,7 @@ import {
   useBorderAudioLevel,
 } from "@100mslive/react-ui";
 import {
+  useHMSActions,
   useHMSStore,
   selectIsPeerAudioEnabled,
   selectPeerMetadata,
@@ -24,7 +25,7 @@ import {
 import TileMenu from "./TileMenu";
 import { getVideoTileLabel } from "./peerTileUtils";
 import { ConnectionIndicator } from "./Connection/ConnectionIndicator";
-import { UI_SETTINGS } from "../common/constants";
+import { APP_DATA, UI_SETTINGS } from "../common/constants";
 import { useIsHeadless, useUISettings } from "./AppData/useUISettings";
 import { useAppConfig } from "./AppData/useAppConfig";
 
@@ -54,6 +55,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
   const trackSelector = trackId
     ? selectTrackByID(trackId)
     : selectVideoTrackByPeerID(peerId);
+  const hmsActions = useHMSActions();
   const track = useHMSStore(trackSelector);
   const peerName = useHMSStore(selectPeerNameByID(peerId));
   const peerMetadata = useHMSStore(selectPeerMetadata(peerId));
@@ -76,7 +78,16 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     setIsMouseHovered(event.type === "mouseenter");
   }, []);
   const appConfig = useAppConfig();
-  // console.log('peerMetadata: ', peerMetadata);
+  console.log('peerMetadata: ', peerMetadata, appConfig);
+
+  useEffect(() => {
+    if (peerMetadata.roomDimension && !appConfig.roomDimension) {
+      hmsActions.setAppData(APP_DATA.appConfig, {
+        roomDimension: peerMetadata.roomDimension
+      }, true);
+    }
+  }, [peerMetadata, appConfig]);
+
 
   return (
     <StyledVideoTile.Root
@@ -113,7 +124,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             </>
           ) : track ? (
             <Video
-              style={{ background: '#000', objectFit: 'contain' }}
+              style={appConfig.roomDimension === 'RD_9X16' ? { background: '#000' } : { background: '#000', objectFit: 'contain' }}
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
               mirror={peerId === localPeerID && track?.source === "regular"}
