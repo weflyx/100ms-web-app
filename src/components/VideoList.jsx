@@ -66,7 +66,7 @@ const List = ({
                         showStatsOnTiles={showStatsOnTiles}
                         key={tile.track?.id || tile.peer.id}
                         width="100vw"
-                        /*height="100vh"*/
+                        height={appConfig.roomDimension === 'RD_9X16' ? '100vh': ''}
                         // width={maxTileCount === 1 ? '100vw' : tile.width}
                         // height={maxTileCount === 1 ? '100vh' : tile.height}
                         peerId={tile.peer?.id}

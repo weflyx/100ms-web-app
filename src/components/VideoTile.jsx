@@ -16,6 +16,7 @@ import {
   selectAudioTrackByPeerID,
   selectTrackByID,
   selectVideoTrackByPeerID,
+  selectCameraStreamByPeerID
 } from "@100mslive/react-sdk";
 import {
   MicOffIcon,
@@ -60,6 +61,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
   const peerName = useHMSStore(selectPeerNameByID(peerId));
   const peerMetadata = useHMSStore(selectPeerMetadata(peerId));
   const audioTrack = useHMSStore(selectAudioTrackByPeerID(peerId));
+  const videoTrack =  useHMSStore(selectCameraStreamByPeerID(peerId));
   const localPeerID = useHMSStore(selectLocalPeerID);
   const isAudioOnly = useUISettings(UI_SETTINGS.isAudioOnly);
   const isHeadless = useIsHeadless();
@@ -88,21 +90,17 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     }
   }, [peerMetadata, appConfig]);
 
-
+  const tilePadding = appConfig.roomDimension === 'RD_9X16' ? {padding: '0px'} : {paddingBottom: '10px'};
   return (
     <StyledVideoTile.Root
-      css={{ width, height, paddingBottom: '10px' }}
+      css={{ width, height, tilePadding }}
       data-testid={`participant_tile_${peerName}`}
     >
       {peerName !== undefined ? (
         <StyledVideoTile.Container
           onMouseEnter={onHoverHandler}
           onMouseLeave={onHoverHandler}
-          ref={
-            isHeadless && appConfig?.headlessConfig?.hideAudioLevel
-              ? undefined
-              : borderAudioRef
-          }
+          ref={null}
         >
           {/*<ConnectionIndicator isTile peerId={peerId} />
           {showStatsOnTiles ? (
@@ -113,7 +111,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}*/}
 
-          {isVideoMuted || isVideoDegraded || isAudioOnly ? (
+          {!videoTrack || isVideoDegraded || isAudioOnly ? (
             <>
               {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
                 shape="square"
@@ -132,21 +130,22 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               data-testid="participant_video_tile"
             />
           ) : null}
-          <StyledVideoTile.Info data-testid="participant_name_onTile">
+
+          {appConfig.roomDimension !== 'RD_9X16' && <StyledVideoTile.Info data-testid="participant_name_onTile">
             {label}
           </StyledVideoTile.Info>
-
+          }
           {/* {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (
             <StyledVideoTile.Info data-testid="participant_name_onTile">
               {label}
             </StyledVideoTile.Info>
           )} */}
-           {showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
+           {/*{showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
             <StyledVideoTile.AudioIndicator data-testid="participant_audio_mute_icon">
               <MicOffIcon />
             </StyledVideoTile.AudioIndicator>
-          ) : null}
+          ) : null}*/}
           {isMouseHovered && !isHeadless && !isLocal ? (
             <TileMenu
               peerID={peerId}
