@@ -22,7 +22,7 @@ const ActiveSpeakerView = ({showStats}) => {
   const showSidePane =  activeSpeaker && peers.length > 1; //false;
 
   return (
-    <Flex css={{ size: "100%", "@lg": { flexDirection: "column" } }}>
+    <Flex css={{ size: "100%" }}>
       <GridCenterView
         peers={[activeSpeaker]}
         maxTileCount={1}
