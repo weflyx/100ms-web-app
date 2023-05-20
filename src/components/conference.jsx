@@ -57,7 +57,7 @@ const Conference = () => {
   }
 
   return (
-    <Flex css={{ size: "100%" }} direction="column">
+    <Flex css={{ size: "100%", backgroundColor: "#202124" }} direction="column">
       {!isHeadless && (
         <Box css={{ h: "$18", "@md": { h: "$17" } }} data-testid="header">
           <Header />
