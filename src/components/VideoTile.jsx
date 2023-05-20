@@ -91,7 +91,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
 
   return (
     <StyledVideoTile.Root
-      css={{ width, height, padding: 0 }}
+      css={{ width, height, paddingBottom: '10px' }}
       data-testid={`participant_tile_${peerName}`}
     >
       {peerName !== undefined ? (
@@ -104,14 +104,14 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               : borderAudioRef
           }
         >
-          <ConnectionIndicator isTile peerId={peerId} />
+          {/*<ConnectionIndicator isTile peerId={peerId} />
           {showStatsOnTiles ? (
             <VideoTileStats
               audioTrackID={audioTrack?.id}
               videoTrackID={track?.id}
               peerID={peerId}
             />
-          ) : null}
+          ) : null}*/}
 
           {isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
@@ -132,6 +132,9 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               data-testid="participant_video_tile"
             />
           ) : null}
+          <StyledVideoTile.Info data-testid="participant_name_onTile">
+            {label}
+          </StyledVideoTile.Info>
 
           {/* {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (
@@ -139,11 +142,11 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
               {label}
             </StyledVideoTile.Info>
           )} */}
-          {/* {showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
+           {showAudioMuted({ appConfig, isHeadless, isAudioMuted }) ? (
             <StyledVideoTile.AudioIndicator data-testid="participant_audio_mute_icon">
               <MicOffIcon />
             </StyledVideoTile.AudioIndicator>
-          ) : null} */}
+          ) : null}
           {isMouseHovered && !isHeadless && !isLocal ? (
             <TileMenu
               peerID={peerId}
@@ -156,7 +159,8 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
       ) : null}
     </StyledVideoTile.Root>
   );
-};
+}
+;
 
 const metaStyles = { left: "20px", bottom: "20px" };
 
