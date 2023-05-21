@@ -8,6 +8,7 @@ import { FeatureFlags } from "../services/FeatureFlags";
 import { Pagination } from "./Pagination";
 import { useAppConfig } from "./AppData/useAppConfig";
 import { useIsHeadless } from "./AppData/useUISettings";
+import { FLYX_ROOM_DIMENSION } from "../common/constants";
 
 const List = ({
   maxTileCount,
@@ -16,6 +17,7 @@ const List = ({
   maxColCount,
   maxRowCount,
   includeScreenShareForPeer,
+  variant // singleTile, vertical, horizontal, grid
 }) => {
   const { aspectRatio } = useTheme();
   const appConfig = useAppConfig();
@@ -27,7 +29,7 @@ const List = ({
     maxRowCount,
     includeScreenShareForPeer,
     aspectRatio,
-    offsetY: getOffset({ isHeadless, appConfig }),
+    offsetY: getOffset({ isHeadless, appConfig })
   });
   const [page, setPage] = useState(0);
   useEffect(() => {
@@ -39,6 +41,7 @@ const List = ({
   const useFreeze = FeatureFlags.freezeVideoList();
 
   // console.log('maxTileCount: ', maxTileCount);
+  console.log('bang: pagesWithTiles: ', pagesWithTiles);
 
   return (
     <StyledVideoList.Root ref={ref}>
@@ -66,7 +69,7 @@ const List = ({
                         showStatsOnTiles={showStatsOnTiles}
                         key={tile.track?.id || tile.peer.id}
                         width="100vw"
-                        height={appConfig.roomDimension === 'RD_9X16' ? '100vh': ''}
+                        height={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? '100vh': (variant === "vertical" ? '17vh' : "")}
                         // width={maxTileCount === 1 ? '100vw' : tile.width}
                         // height={maxTileCount === 1 ? '100vh' : tile.height}
                         peerId={tile.peer?.id}

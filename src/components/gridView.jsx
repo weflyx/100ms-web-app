@@ -43,6 +43,7 @@ export const GridCenterView = ({
             showStatsOnTiles={showStatsOnTiles}
             peers={peers}
             maxTileCount={limitMaxTiles ? MAX_TILES_FOR_MOBILE : maxTileCount}
+            variant="singleTile"
           />
         ) : eventRoomIDs.some(id => window.location.href.includes(id)) ? (
           <Box
@@ -110,6 +111,7 @@ export const GridSidePaneView = ({ peers, showStatsOnTiles }) => {
             showStatsOnTiles={showStatsOnTiles}
             peers={peers}
             maxColCount={2}
+            variant="vertical"
           />
         )}
       </Flex>
