@@ -9,6 +9,7 @@ import { Pagination } from "./Pagination";
 import { useAppConfig } from "./AppData/useAppConfig";
 import { useIsHeadless } from "./AppData/useUISettings";
 import { FLYX_ROOM_DIMENSION } from "../common/constants";
+import {ROLES} from "../common/roles";
 
 const List = ({
   maxTileCount,
@@ -43,8 +44,11 @@ const List = ({
   // console.log('maxTileCount: ', maxTileCount);
   // console.log('bang: pagesWithTiles: ', pagesWithTiles);
   // const tileHeight = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? "100vh": (variant === "active-speaker" ? "100vh" : "17vh");
-  const tileWidth = variant === "active-speaker" ? "100vw" : "50%";
-  const tileHeight = variant === "active-speaker" ? "100vh" : "16.7vh";
+  const videoSpeakers = peers.filter(peer => peer.roleName === ROLES.VIDEO_SPEAKER);
+  const tileWidth = variant === "active-speaker" ? "100vw" : videoSpeakers.length > 3 ? "50%" : "100%";
+  const tileHeight = variant === "active-speaker" ? "100vh" :
+      ((videoSpeakers.length >= 1 && videoSpeakers.length < 4) ? "33vh" :
+          (videoSpeakers.length >= 4 && videoSpeakers.length < 7) ? "28vh" : "16.7vh");
 
   return (
     <StyledVideoList.Root ref={ref}>
@@ -60,7 +64,22 @@ const List = ({
                   }}
                   data-testid="video-list-container"
                 >
-                  {tiles.map((tile, i) =>
+                  {videoSpeakers.map((speaker) =>
+                    (
+                      <VideoTile
+                          showStatsOnTiles={showStatsOnTiles}
+                          key={speaker.videoTrack || speaker.id}
+                          width={tileWidth}
+                          height={tileHeight}
+                          // width={maxTileCount === 1 ? '100vw' : tile.width}
+                          // height={maxTileCount === 1 ? '100vh' : tile.height}
+                          peerId={speaker.id}
+                          trackId={speaker.videoTrack}
+                      />
+                    )
+                  )}
+
+                  {/*{tiles.map((tile, i) =>
                     tile.track?.source === "screen" ? (
                       <ScreenshareTile
                         showStatsOnTiles={showStatsOnTiles}
@@ -81,19 +100,19 @@ const List = ({
                         trackId={tile.track?.id}
                       />
                     )
-                  )}
+                  )}*/}
                 </StyledVideoList.View>
               </Freeze>
             ))
           : null}
       </StyledVideoList.Container>
-      {pagesWithTiles.length > 1 ? (
+      {/*{pagesWithTiles.length > 1 ? (
         <Pagination
           page={page}
           setPage={setPage}
           numPages={pagesWithTiles.length}
         />
-      ) : null}
+      ) : null}*/}
     </StyledVideoList.Root>
   );
 };
