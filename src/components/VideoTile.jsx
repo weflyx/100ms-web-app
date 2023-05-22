@@ -90,7 +90,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     }
   }, [peerMetadata, appConfig]);
 
-  console.log('bang height: ', height);
+  // console.log('bang height: ', height);
   // const tilePadding = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? {padding: '0px'} : {paddingBottom: '10px'};
   return (
     <StyledVideoTile.Root

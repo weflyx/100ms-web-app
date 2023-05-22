@@ -113,7 +113,7 @@ export const SidePane = ({
   );
 };
 
-const ScreenShareComponent = ({
+export const ScreenShareComponent = ({
   showStats,
   amIPresenting,
   peerPresenting,

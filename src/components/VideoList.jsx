@@ -17,7 +17,7 @@ const List = ({
   maxColCount,
   maxRowCount,
   includeScreenShareForPeer,
-  variant // singleTile, vertical, horizontal, grid
+  variant // active-speaker, vertical, horizontal, grid
 }) => {
   const { aspectRatio } = useTheme();
   const appConfig = useAppConfig();
@@ -41,7 +41,10 @@ const List = ({
   const useFreeze = FeatureFlags.freezeVideoList();
 
   // console.log('maxTileCount: ', maxTileCount);
-  console.log('bang: pagesWithTiles: ', pagesWithTiles);
+  // console.log('bang: pagesWithTiles: ', pagesWithTiles);
+  // const tileHeight = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? "100vh": (variant === "active-speaker" ? "100vh" : "17vh");
+  const tileWidth = variant === "active-speaker" ? "100vw" : "50%";
+  const tileHeight = variant === "active-speaker" ? "100vh" : "16.7vh";
 
   return (
     <StyledVideoList.Root ref={ref}>
@@ -53,7 +56,9 @@ const List = ({
                   css={{
                     left: getLeft(pageNo, page),
                     transition: "left 0.3s ease-in-out",
+                    placeContent: appConfig.roomDimension === FLYX_ROOM_DIMENSION.LANDSCAPE && variant === "vertical" ? "flex-start": "center"
                   }}
+                  data-testid="video-list-container"
                 >
                   {tiles.map((tile, i) =>
                     tile.track?.source === "screen" ? (
@@ -68,8 +73,8 @@ const List = ({
                       <VideoTile
                         showStatsOnTiles={showStatsOnTiles}
                         key={tile.track?.id || tile.peer.id}
-                        width="100vw"
-                        height={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? '100vh': (variant === "vertical" ? '17vh' : "")}
+                        width={tileWidth}
+                        height={tileHeight}
                         // width={maxTileCount === 1 ? '100vw' : tile.width}
                         // height={maxTileCount === 1 ? '100vh' : tile.height}
                         peerId={tile.peer?.id}

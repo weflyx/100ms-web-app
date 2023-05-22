@@ -12,7 +12,7 @@ import {
 import { MainGridView } from "./mainGridView";
 import { AppContext } from "../components/context/AppContext";
 import FullPageProgress from "../components/FullPageProgress";
-import ScreenShareView from "./screenShareView";
+// import ScreenShareView from "./screenShareView";
 import { useWhiteboardMetadata } from "../plugins/whiteboard";
 import { useBeamAutoLeave } from "../common/hooks";
 import { UI_MODE_ACTIVE_SPEAKER, UI_SETTINGS } from "../common/constants";
@@ -68,7 +68,8 @@ export const ConferenceMainView = () => {
       peerSharingPlaylist) &&
     !isAudioOnly
   ) {
-    ViewComponent = ScreenShareView;
+    // ViewComponent = ScreenShareView;
+    ViewComponent = ActiveSpeakerView;
   } else if (uiViewMode === UI_MODE_ACTIVE_SPEAKER) {
     ViewComponent = ActiveSpeakerView;
   } else {
