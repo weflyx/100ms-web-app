@@ -66,7 +66,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
   const isAudioOnly = useUISettings(UI_SETTINGS.isAudioOnly);
   const isHeadless = useIsHeadless();
   // const isAudioMuted = !useHMSStore(selectIsPeerAudioEnabled(peerId));
-  // const isVideoMuted = !track?.enabled;
+  const isVideoMuted = !track?.enabled;
   const [isMouseHovered, setIsMouseHovered] = useState(false);
   // const borderAudioRef = useBorderAudioLevel(audioTrack?.id);
   const isVideoDegraded = track?.degraded;
@@ -112,7 +112,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}*/}
 
-          {!videoTrack || isVideoDegraded || isAudioOnly ? (
+          {!videoTrack ||  isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
               {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
                 shape="square"
