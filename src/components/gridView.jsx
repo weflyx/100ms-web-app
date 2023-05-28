@@ -43,6 +43,7 @@ export const GridCenterView = ({
             showStatsOnTiles={showStatsOnTiles}
             peers={peers}
             maxTileCount={limitMaxTiles ? MAX_TILES_FOR_MOBILE : maxTileCount}
+            variant="active-speaker"
           />
         ) : eventRoomIDs.some(id => window.location.href.includes(id)) ? (
           <Box
@@ -94,7 +95,7 @@ export const GridSidePaneView = ({ peers, showStatsOnTiles }) => {
     <Flex
       direction="column"
       css={{
-        flex: "0 0 20%",
+        flex: "0 0 40%",
         mx: "$4",
         "@lg": {
           flex: "0 0 25%",
@@ -103,13 +104,15 @@ export const GridSidePaneView = ({ peers, showStatsOnTiles }) => {
           flex: "1 1 0",
         },
       }}
+      data-testid="grid-side-pane-view"
     >
-      <Flex css={{ flex: "1 1 0" }} align="end">
+      <Flex css={{ flex: "1 1 0" }} align="end" data-testid="side-pane-video-list-parent-container">
         {peers && peers.length > 0 && (
           <VideoList
             showStatsOnTiles={showStatsOnTiles}
             peers={peers}
             maxColCount={2}
+            variant="vertical"
           />
         )}
       </Flex>
