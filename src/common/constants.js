@@ -114,3 +114,8 @@ export const UI_SETTINGS = {
   isAudioOnly: "isAudioOnly",
   isHeadless: "isHeadless",
 };
+
+export const FLYX_ROOM_DIMENSION = {
+  PORTRAIT: "RD_9X16",
+  LANDSCAPE: "RD_16X9",
+};

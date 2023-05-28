@@ -55,7 +55,7 @@ const ScreenShareView = ({ showStats }) => {
         peerPresenting={peerPresenting}
         peerSharingPlaylist={peerSharingPlaylist}
       />
-      <Flex
+      {/* <Flex
         direction={{ "@initial": "column", "@lg": "row" }}
         css={{
           overflow: "hidden",
@@ -74,7 +74,7 @@ const ScreenShareView = ({ showStats }) => {
           smallTilePeers={smallTilePeers}
           totalPeers={peers.length}
         />
-      </Flex>
+      </Flex> */}
     </Flex>
   );
 };
@@ -113,7 +113,7 @@ export const SidePane = ({
   );
 };
 
-const ScreenShareComponent = ({
+export const ScreenShareComponent = ({
   showStats,
   amIPresenting,
   peerPresenting,

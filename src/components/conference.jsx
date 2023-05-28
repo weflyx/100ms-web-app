@@ -55,7 +55,7 @@ const Conference = () => {
   if (!isConnectedToRoom) {
     return <FullPageProgress />;
   }
-
+//backgroundColor: "#202124"
   return (
     <Flex css={{ size: "100%" }} direction="column">
       {!isHeadless && (
