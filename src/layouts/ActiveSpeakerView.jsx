@@ -34,9 +34,17 @@ const ActiveSpeakerView = ({showStats}) => {
   // show local peer if there hasn't been any dominant speaker
   const videoSpeakers = peers.filter(peer => peer.roleName === ROLES.VIDEO_SPEAKER);
   const numberOfSpeakers = videoSpeakers.length;
-  const activeSpeaker = latestDominantSpeakerRef.current || videoSpeakers.find(s => s.videoTrack) || localPeer;
-  console.log('videoSpeakers: ', videoSpeakers, activeSpeaker);
-  const showSidePane =  appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? false : activeSpeaker && numberOfSpeakers > 1;
+  let activeSpeaker;
+  if (latestDominantSpeakerRef.current) {
+    if (videoSpeakers.find(s => s.id === latestDominantSpeakerRef.current.id)) {
+      activeSpeaker = latestDominantSpeakerRef.current;
+    }
+  }
+  if (!activeSpeaker) {
+    activeSpeaker = videoSpeakers.find(s => s.videoTrack) || videoSpeakers[0] || localPeer;
+  }
+  // console.log('videoSpeakers: ', videoSpeakers, activeSpeaker, latestDominantSpeakerRef.current);
+  const showSidePane = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? false : activeSpeaker && numberOfSpeakers > 1;
 
   const amIPresenting = localPeerID === peerPresenting?.id;
 
