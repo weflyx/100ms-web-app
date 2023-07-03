@@ -112,6 +112,14 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}*/}
 
+          {/*{appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT && <StyledVideoTile.Info data-testid="participant_name_onTile">
+            {label}
+          </StyledVideoTile.Info>
+          }*/}
+          <div style={{position: 'fixed', top: '30px', fontSize: '20px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+            <span>{label}</span>
+          </div>
+
           {!videoTrack ||  isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
               {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
@@ -123,7 +131,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             </>
           ) : track ? (
             <Video
-              style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'contain' }}
+              style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'cover' }}
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
               mirror={peerId === localPeerID && track?.source === "regular"}
@@ -132,10 +140,6 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             />
           ) : null}
 
-          {appConfig.roomDimension !== FLYX_ROOM_DIMENSION.PORTRAIT && <StyledVideoTile.Info data-testid="participant_name_onTile">
-            {label}
-          </StyledVideoTile.Info>
-          }
           {/* {(!isHeadless ||
             (isHeadless && !appConfig?.headlessConfig?.hideTileName)) && (
             <StyledVideoTile.Info data-testid="participant_name_onTile">
