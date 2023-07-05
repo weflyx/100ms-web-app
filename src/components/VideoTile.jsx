@@ -94,7 +94,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
   // const tilePadding = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? {padding: '0px'} : {paddingBottom: '10px'};
   return (
     <StyledVideoTile.Root
-      css={{ width, height }}
+      css={{ width, height, padding: 0 }}
       data-testid={`participant_tile_${peerName}`}
     >
       {peerName !== undefined ? (
@@ -116,7 +116,7 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             {label}
           </StyledVideoTile.Info>
           }*/}
-          <div style={{position: 'fixed', top: '30px', fontSize: '20px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+          <div style={{position: 'fixed', top: '30px', fontSize: '50px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
             <span>{label}</span>
           </div>
 
