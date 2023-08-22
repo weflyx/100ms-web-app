@@ -12,7 +12,7 @@ import {
 import { Flex } from "@100mslive/react-ui";
 import { GridCenterView, GridSidePaneView } from "../components/gridView";
 import {useAppConfig} from "../components/AppData/useAppConfig";
-import { FLYX_ROOM_DIMENSION } from "../common/constants";
+import { FLYX_ROOM_DIMENSION, BAKSTAGE_LAYOUT } from "../common/constants";
 import { ROLES } from "../common/roles";
 import { ScreenShareComponent } from "./screenShareView";
 
@@ -44,7 +44,8 @@ const ActiveSpeakerView = ({showStats}) => {
     activeSpeaker = videoSpeakers.find(s => s.videoTrack) || videoSpeakers[0] || localPeer;
   }
   // console.log('videoSpeakers: ', videoSpeakers, activeSpeaker, latestDominantSpeakerRef.current);
-  const showSidePane = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? false : activeSpeaker && numberOfSpeakers > 1;
+  //const showSidePane = appConfig.layout === FLYX_ROOM_DIMENSION.PORTRAIT ? false : activeSpeaker && numberOfSpeakers > 1;
+  const showSidePane = false;
 
   const amIPresenting = localPeerID === peerPresenting?.id;
 

@@ -60,7 +60,8 @@ const List = ({
                   css={{
                     left: getLeft(pageNo, page),
                     transition: "left 0.3s ease-in-out",
-                    placeContent: appConfig.roomDimension === FLYX_ROOM_DIMENSION.LANDSCAPE && variant === "vertical" ? "flex-start": "center"
+                    /*placeContent: appConfig.roomDimension === FLYX_ROOM_DIMENSION.LANDSCAPE && variant === "vertical" ? "flex-start": "center"*/
+                    placeContent: "center"
                   }}
                   data-testid="video-list-container"
                 >

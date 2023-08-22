@@ -139,7 +139,8 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             </>
           ) : track ? (
             <Video
-              style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'cover' }}
+              /*style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'cover' }}*/
+              style={{background: '#202124' }}
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
               mirror={peerId === localPeerID && track?.source === "regular"}
