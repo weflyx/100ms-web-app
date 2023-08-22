@@ -26,7 +26,7 @@ import {
 import TileMenu from "./TileMenu";
 import { getVideoTileLabel } from "./peerTileUtils";
 // import { ConnectionIndicator } from "./Connection/ConnectionIndicator";
-import { APP_DATA, FLYX_ROOM_DIMENSION, UI_SETTINGS } from "../common/constants";
+import { APP_DATA, FLYX_ROOM_DIMENSION, UI_SETTINGS, BAKSTAGE_LAYOUT } from "../common/constants";
 import { useIsHeadless, useUISettings } from "./AppData/useUISettings";
 import { useAppConfig } from "./AppData/useAppConfig";
 
@@ -80,13 +80,15 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
     setIsMouseHovered(event.type === "mouseenter");
   }, []);
   const appConfig = useAppConfig();
+  let layout = BAKSTAGE_LAYOUT.PORTRAIT;
   // console.log('peerMetadata: ', peerMetadata, appConfig);
 
   useEffect(() => {
-    if (peerMetadata.roomDimension && !appConfig.roomDimension) {
+    if (peerMetadata.layout && !appConfig.layout) {
       hmsActions.setAppData(APP_DATA.appConfig, {
-        roomDimension: peerMetadata.roomDimension
+        layout: peerMetadata.layout
       }, true);
+      layout = peerMetadata.layout;
     }
   }, [peerMetadata, appConfig]);
 
@@ -116,9 +118,15 @@ const Tile = ({ peerId, trackId, showStatsOnTiles, width, height }) => {
             {label}
           </StyledVideoTile.Info>
           }*/}
-          <div style={{position: 'fixed', top: '30px', fontSize: '50px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
-            <span>{label}</span>
-          </div>
+
+          {appConfig.layout === BAKSTAGE_LAYOUT.LANDSCAPE ?
+            <div style={{position: 'fixed', top: '20px', fontSize: '25px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+              <span>{label}</span>
+            </div> :
+              <div style={{position: 'fixed', top: '30px', fontSize: '50px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+                <span>{label}</span>
+              </div>
+          }
 
           {!videoTrack ||  isVideoMuted || isVideoDegraded || isAudioOnly ? (
             <>
