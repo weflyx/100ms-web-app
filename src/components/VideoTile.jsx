@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useState } from "react";
+import React, {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import {
   selectAudioTrackByPeerID,
   selectIsPeerAudioEnabled,
@@ -6,8 +6,9 @@ import {
   selectPeerMetadata,
   selectPeerNameByID,
   selectVideoTrackByID,
-  selectVideoTrackByPeerID,
+  selectVideoTrackByPeerID, useHMSActions,
   useHMSStore,
+  selectCameraStreamByPeerID
 } from "@100mslive/react-sdk";
 import {
   BrbIcon,
@@ -26,7 +27,7 @@ import { getVideoTileLabel } from "./peerTileUtils";
 import TileMenu from "./TileMenu";
 import { useAppConfig } from "./AppData/useAppConfig";
 import { useIsHeadless, useUISettings } from "./AppData/useUISettings";
-import { UI_SETTINGS } from "../common/constants";
+import {APP_DATA, BAKSTAGE_LAYOUT, UI_SETTINGS} from "../common/constants";
 
 const Tile = ({
   peerId,
@@ -54,6 +55,11 @@ const Tile = ({
   const borderAudioRef = useBorderAudioLevel(audioTrack?.id);
   const isVideoDegraded = track?.degraded;
   const isLocal = localPeerID === peerId;
+
+  const hmsActions = useHMSActions();
+  const peerMetadata = useHMSStore(selectPeerMetadata(peerId));
+  const videoTrack = useHMSStore(selectCameraStreamByPeerID(peerId));
+
   const label = getVideoTileLabel({
     peerName,
     track,
@@ -77,16 +83,45 @@ const Tile = ({
     return "large";
   }, [width, height]);
 
+  const profileImageStyles = {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translateX(-50%) translateY(-50%)',
+    color: 'var(--hms-ui-colors-white)',
+    fontFamily: 'var(--hms-ui-fonts-sans)',
+    width: '100%',
+    height: '100%',
+    maxWidth: '300px',
+    maxHeight: '300px',
+    borderRadius: '10px',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+  };
+// TODO: Handle image URL not reachable scenario
+  const BakstageAvatar = ({ imageUrl }) => {
+    return (
+        imageUrl ? <div style={Object.assign({}, profileImageStyles, { backgroundImage: `url(${imageUrl})` })}></div> : <img src="/logo.svg" />
+    );
+  }
+  const appConfig = useAppConfig();
+  let layout = BAKSTAGE_LAYOUT.PORTRAIT;
+
+  useEffect(() => {
+    if (peerMetadata.layout && !appConfig.layout) {
+      hmsActions.setAppData(APP_DATA.appConfig, {
+        layout: peerMetadata.layout
+      }, true);
+      layout = peerMetadata.layout;
+    }
+  }, [peerMetadata, appConfig]);
+
   return (
     <StyledVideoTile.Root
       css={{
         width,
         height,
-        padding: getPadding({
-          isHeadless,
-          tileOffset: headlessConfig?.tileOffset,
-          hideAudioLevel: headlessConfig?.hideAudioLevel,
-        }),
+        padding: 0,
         ...rootCSS,
       }}
       data-testid={`participant_tile_${peerName}`}
@@ -95,24 +130,41 @@ const Tile = ({
         <StyledVideoTile.Container
           onMouseEnter={onHoverHandler}
           onMouseLeave={onHoverHandler}
-          ref={
-            isHeadless && headlessConfig?.hideAudioLevel
-              ? undefined
-              : borderAudioRef
-          }
+          ref={null}
           noRadius={isHeadless && Number(headlessConfig?.tileOffset) === 0}
           css={containerCSS}
         >
-          {showStatsOnTiles && isTileBigEnoughToShowStats ? (
-            <VideoTileStats
-              audioTrackID={audioTrack?.id}
-              videoTrackID={track?.id}
-              peerID={peerId}
-              isLocal={isLocal}
-            />
+          {appConfig.layout === BAKSTAGE_LAYOUT.LANDSCAPE ?
+              <div style={{position: 'fixed', top: '20px', fontSize: '25px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+                <span>{label}</span>
+              </div> :
+              <div style={{position: 'fixed', top: '30px', fontSize: '50px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
+                <span>{label}</span>
+              </div>
+          }
+
+          {!videoTrack ||  isVideoMuted || isVideoDegraded || isAudioOnly ? (
+              <>
+                {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
+                    shape="square"
+                    style={{ height: '100%', width: '100%', maxWidth: '300px', maxHeight: '300px' }}
+                    name={peerName || ""}
+                    data-testid="participant_avatar_icon"
+                />}
+              </>
+          ) : track ? (
+              <Video
+                  /*style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'cover' }}*/
+                  style={{background: '#202124' }}
+                  trackId={track?.id}
+                  attach={isLocal ? undefined : !isAudioOnly}
+                  mirror={peerId === localPeerID && track?.source === "regular"}
+                  degraded={isVideoDegraded}
+                  data-testid="participant_video_tile"
+              />
           ) : null}
 
-          {track ? (
+          {/*{track ? (
             <Video
               trackId={track?.id}
               attach={isLocal ? undefined : !isAudioOnly}
@@ -129,40 +181,7 @@ const Tile = ({
                 objectFit,
               }}
             />
-          ) : null}
-          {isVideoMuted || isVideoDegraded || (!isLocal && isAudioOnly) ? (
-            <StyledVideoTile.AvatarContainer>
-              <Avatar
-                name={peerName || ""}
-                data-testid="participant_avatar_icon"
-                size={avatarSize}
-              />
-            </StyledVideoTile.AvatarContainer>
-          ) : null}
-
-          {showAudioMuted({
-            hideTileAudioMute: headlessConfig?.hideTileAudioMute,
-            isHeadless,
-            isAudioMuted,
-          }) ? (
-            <StyledVideoTile.AudioIndicator
-              data-testid="participant_audio_mute_icon"
-              size={
-                width && height && (width < 180 || height < 180)
-                  ? "small"
-                  : "medium"
-              }
-            >
-              <MicOffIcon />
-            </StyledVideoTile.AudioIndicator>
-          ) : null}
-          {isMouseHovered && !isHeadless ? (
-            <TileMenu
-              peerID={peerId}
-              audioTrackID={audioTrack?.id}
-              videoTrackID={track?.id}
-            />
-          ) : null}
+          ) : null}*/}
           <PeerMetadata peerId={peerId} />
           <TileConnection
             hideLabel={hideLabel}

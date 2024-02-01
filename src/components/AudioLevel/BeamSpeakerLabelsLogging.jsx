@@ -8,9 +8,12 @@ export function BeamSpeakerLabelsLogging() {
   const isHeadless = useIsHeadless();
 
   useEffect(() => {
-    if (FeatureFlags.enableBeamSpeakersLogging && isHeadless) {
+    /*if (FeatureFlags.enableBeamSpeakersLogging && isHeadless) {
       hmsActions.enableBeamSpeakerLabelsLogging();
-    }
+    }*/
+    hmsActions.enableBeamSpeakerLabelsLogging().then(() =>{
+      console.log("enableBeamSpeakerLabelsLogging enabled");
+    });
   }, [hmsActions, isHeadless]);
   return null;
 }

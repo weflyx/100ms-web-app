@@ -249,3 +249,13 @@ export const PDF_SHARING_OPTIONS = {
   FROM_YOUR_COMPUTER: "From your Computer",
   FROM_A_URL: "From a URL",
 };
+
+export const FLYX_ROOM_DIMENSION = {
+  PORTRAIT: "RD_9X16",
+  LANDSCAPE: "RD_16X9",
+};
+
+export const BAKSTAGE_LAYOUT = {
+  PORTRAIT: "TALL",
+  LANDSCAPE: "WEBINAR",
+};

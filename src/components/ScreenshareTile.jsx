@@ -59,7 +59,7 @@ const Tile = ({ peerId, width = "100%", height = "100%" }) => {
         <StyledVideoTile.Container
           transparentBg
           ref={fullscreenRef}
-          css={{ flexDirection: "column" }}
+          css={{ flexDirection: "column", backgroundColor: "#000" }}
           onMouseEnter={() => setIsMouseHovered(true)}
           onMouseLeave={() => {
             setIsMouseHovered(false);

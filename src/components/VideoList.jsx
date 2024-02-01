@@ -12,6 +12,8 @@ import useSortedPeers from "../common/useSortedPeers";
 import { useAppConfig } from "./AppData/useAppConfig";
 import { useIsHeadless, useUISettings } from "./AppData/useUISettings";
 import { UI_SETTINGS } from "../common/constants";
+import { FLYX_ROOM_DIMENSION } from "../common/constants";
+import {ROLES} from "../common/roles";
 
 const List = ({
   maxTileCount,
@@ -19,6 +21,7 @@ const List = ({
   maxColCount,
   maxRowCount,
   includeScreenShareForPeer,
+  variant // active-speaker, vertical, horizontal, grid
 }) => {
   const { aspectRatio } = useTheme();
   const tileOffset = useAppConfig("headlessConfig", "tileOffset");
@@ -45,6 +48,14 @@ const List = ({
       setPage(0);
     }
   }, [pagesWithTiles.length, page]);
+  // console.log('maxTileCount: ', maxTileCount);
+  // console.log('bang: pagesWithTiles: ', pagesWithTiles);
+  // const tileHeight = appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? "100vh": (variant === "active-speaker" ? "100vh" : "17vh");
+  const videoSpeakers = peers.filter(peer => peer.roleName === ROLES.VIDEO_SPEAKER);
+  const tileWidth = variant === "active-speaker" ? "100vw" : videoSpeakers.length > 3 ? "50%" : "100%";
+  const tileHeight = variant === "active-speaker" ? "100vh" :
+      ((videoSpeakers.length >= 1 && videoSpeakers.length < 4) ? "33vh" :
+          (videoSpeakers.length >= 4 && videoSpeakers.length < 7) ? "28vh" : "16.7vh");
   return (
     <StyledVideoList.Root ref={ref}>
       <StyledVideoList.Container
@@ -57,7 +68,7 @@ const List = ({
               }
               return (
                 <Fragment key={tile.track?.id || tile.peer.id}>
-                  {tile.track?.source === "screen" ? (
+                  {/*{tile.track?.source === "screen" ? (
                     <ScreenshareTile
                       width={tile.width}
                       height={tile.height}
@@ -70,19 +81,32 @@ const List = ({
                       peerId={tile.peer?.id}
                       trackId={tile.track?.id}
                     />
+                  )}*/}
+                  {videoSpeakers.map((speaker) =>
+                      (
+                          <VideoTile
+                              key={speaker.videoTrack || speaker.id}
+                              width={tileWidth}
+                              height={tileHeight}
+                              // width={maxTileCount === 1 ? '100vw' : tile.width}
+                              // height={maxTileCount === 1 ? '100vh' : tile.height}
+                              peerId={speaker.id}
+                              trackId={speaker.videoTrack}
+                          />
+                      )
                   )}
                 </Fragment>
               );
             })
           : null}
       </StyledVideoList.Container>
-      {!isHeadless && pagesWithTiles.length > 1 ? (
+      {/*{!isHeadless && pagesWithTiles.length > 1 ? (
         <Pagination
           page={page}
           setPage={setPage}
           numPages={pagesWithTiles.length}
         />
-      ) : null}
+      ) : null}*/}
     </StyledVideoList.Root>
   );
 };

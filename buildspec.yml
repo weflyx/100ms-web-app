@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install react
+      - ls -ltr
+  pre_build:
+    commands:
+      - export S3_KEY_INJECT_SCRIPT="/inject/"
+      - export S3_KEY_WIDGET_BUILD="/widget/"
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo 'Node Version'
+      - node --version
+      - yarn config set registry https://registry.npmjs.org
+      - rm -rf yarn.lock
+      - yarn install
+      - yarn build
+  post_build:
+    commands:
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+      - ls -ltr
+      - echo "{\"lastUpdated\":\"${BUILD_DATE}\",\"buildNumber\":\"${CODEBUILD_BUILD_NUMBER}\"}" > build/current-version.json
+      - aws s3 cp build/ s3://${S3_BUCKET}${S3_KEY_INJECT_SCRIPT} --recursive
+      - aws s3 cp widget/build/ s3://${S3_BUCKET}${S3_KEY_WIDGET_BUILD} --recursive
+      - aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths "$S3_KEY_INJECT_SCRIPT*" "$S3_KEY_WIDGET_BUILD*"
