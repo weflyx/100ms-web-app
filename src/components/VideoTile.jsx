@@ -122,6 +122,7 @@ const Tile = ({
         width,
         height,
         padding: 0,
+        borderRadius: 0,
         ...rootCSS,
       }}
       data-testid={`participant_tile_${peerName}`}
@@ -132,7 +133,10 @@ const Tile = ({
           onMouseLeave={onHoverHandler}
           ref={null}
           noRadius={isHeadless && Number(headlessConfig?.tileOffset) === 0}
-          css={containerCSS}
+          css={{
+            borderRadius: 0,
+            ...containerCSS
+          }}
         >
           {appConfig.layout === BAKSTAGE_LAYOUT.LANDSCAPE ?
               <div style={{position: 'fixed', top: '20px', fontSize: '25px', fontWeight: 600, color: 'white', textShadow: '-2px 1px 4px black'}}>
@@ -143,7 +147,7 @@ const Tile = ({
               </div>
           }
 
-          {!videoTrack ||  isVideoMuted || isVideoDegraded || isAudioOnly ? (
+          {!videoTrack ||  isVideoMuted || isAudioOnly ? (
               <>
                 {peerMetadata?.userProfileImageUrl ? <BakstageAvatar imageUrl={peerMetadata?.userProfileImageUrl} /> : <Avatar
                     shape="square"
@@ -155,7 +159,7 @@ const Tile = ({
           ) : track ? (
               <Video
                   /*style={appConfig.roomDimension === FLYX_ROOM_DIMENSION.PORTRAIT ? { background: '#202124' } : { background: '#202124', objectFit: 'cover' }}*/
-                  style={{background: '#202124' }}
+                  style={{background: '#202124', borderRadius: 0 }}
                   trackId={track?.id}
                   attach={isLocal ? undefined : !isAudioOnly}
                   mirror={peerId === localPeerID && track?.source === "regular"}
@@ -182,14 +186,14 @@ const Tile = ({
               }}
             />
           ) : null}*/}
-          <PeerMetadata peerId={peerId} />
+          {/*<PeerMetadata peerId={peerId} />
           <TileConnection
             hideLabel={hideLabel}
             name={label}
             isTile
             peerId={peerId}
             width={width}
-          />
+          />*/}
         </StyledVideoTile.Container>
       ) : null}
     </StyledVideoTile.Root>
